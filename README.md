@@ -25,6 +25,26 @@ ln -s /dev/tts/0 /dev/ttyS0
 
 The question remains, why is the checksum at the start on the way out, and at the end on the way in? Possibly I'm confusing myself here, and the checksum should come at the start but looking at the code it doesn't seem to.
 
+## Dumps
+
+When the machine is starting up this is repeated:
+
+```
+C0 01 00 00 01 00 00
+```
+
+When the machine is erroring this is repeated indefinately: 
+
+```
+C0 16 00 00 04 00 12
+```
+
+When the machine is in test mode this is repeated indefinately:
+
+```
+C0 13 00 00 00 00 13
+```
+
 ## Emulator Information
 
 The emulation is written in _python 2.7_ which you must have installed.
