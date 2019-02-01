@@ -24,8 +24,6 @@ ln -s /dev/tts/0 /dev/ttyS0
   - 2nd to 21st byte is payload
   - 22nd byte is checksum which is the exclusive bitwise or (^) operation over the previous 20 bytes.
 
-The question remains, why is the checksum at the start on the way out, and at the end on the way in? Possibly I'm confusing myself here, and the checksum should come at the start but looking at the code it doesn't seem to.
-
 ## Dumps
 
 When the machine is starting up this is repeated:
