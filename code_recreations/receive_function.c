@@ -24,11 +24,11 @@ int LGJCbord::recv(LGJCbord *this)
     while ( *((_BYTE *)this + received_array_index + 68) != 0xC0)
     {
       if ( ++received_array_index > 127 )
-        goto LABEL_6;
+        goto TIMEOUT;
     }
     data_start_index = received_array_index;
 
-LABEL_6:
+TIMEOUT:
 
     return_status = 3;
 

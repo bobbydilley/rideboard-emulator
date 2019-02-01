@@ -23,17 +23,14 @@ while 1:
 
     checksum_total = checksum_total ^ ord(byte)
 
-    if bytes[0] == 0xC0 and len(bytes) == 2:
-        checksum = ord(byte)
-        checksum_total = 0x00
-
     if ord(byte) == 0xC0:
         bytes = [0xC0]
+        checksum_total = 0x00
 
 
     if len(bytes) == 7:
-        if checksum_total == checksum:
-            print "[OK]"
+        if checksum_total == byte[6]:
+            print "[OK]",
 
         print "C0",
         ser.write(0xC0)
