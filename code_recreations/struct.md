@@ -13,18 +13,25 @@ The LGJCbord struct memory layout:
       026: wont send if 1 (test mode no send?)
 
       031: Some variable that causes a branch
-32 -> 037: CLASS SEND BUFFER
-      038: some checksum variable
+32 -> 038: CLASS SEND BUFFER
 39 -> 045: SERIAL SEND BUFFER
 46 -> 067: CLASS RECEIVE BUFFER
 68 -> 195: SERIAL RECIEVE BUFFER
       196: int sent okay? set to 0 on init
       200: int Received Status? gets set to 1 on init
 
+      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6)
+
       212: made up of a 24bit number from (50, 51, 52)
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
       217: Set to 0 if the bit 6 of 52 doesn't equal 0
       240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
+      256: Gets set to 0 when seat stop
+      260: Gets set to 1 when seat stops, and has not not be 2 to set seat to stop
+      268: Gets set to something when seat stops
+
+      289: sets whats in 35
+      313: Something about teest mode
 
       324: Some counter
       328: Gets set to value in 47 if value in 47 is less than 4
@@ -32,6 +39,14 @@ The LGJCbord struct memory layout:
       332: Gets incremeneted if 53 is less than 10
       336: Gets set to what was in 53 - initially set to
       340: If 53 is less than 10 and this is 0 then this equals 200 + 53
+
+32 - 0xC0
+33 - Takes from 209 which is the command that is set I think
+34 - set to 0
+35 - Set to 0 if on test mode or whats in 289 if not
+36 - Gets set to 308
+37 - set to 131 if not in test mode?
+38 - Checksum
 
 46 - 0xC0
 47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
