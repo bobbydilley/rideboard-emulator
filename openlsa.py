@@ -8,6 +8,7 @@ ser = serial.Serial(
     port='/dev/tty.usbserial-FTB7NTX1',
     baudrate=115200
 )
+
 ser.isOpen()
 
 print "Serial communication established"
@@ -16,26 +17,34 @@ bytes = []
 checksum = 0x00
 checksum_total = 0x00
 while 1:
-	byte = ser.read(1)
-	bytes.append(ord(byte))
-	print byte.encode('hex').upper(), 
+    byte = ser.read(1)
+    bytes.append(ord(byte))
+    print byte.encode('hex').upper(),
 
-	if bytes == [0xC0]:
-		checksum = ord(byte)
+    checksum_total = checksum_total ^ ord(byte)
 
-	if ord(byte) == 0xC0:
-		bytes = [0xC0]
+    if bytes[0] == 0xC0 and len(bytes) == 2:
+        checksum = ord(byte)
+        checksum_total = 0x00
 
-	checksum_total = checksum_total ^ ord(byte)
+    if ord(byte) == 0xC0:
+        bytes = [0xC0]
 
-	if len(bytes) is 7:
-		if checksum_total == checksum:
-			print "[OK]",
-		ser.write(0xC0)	
-		ser.write(0x01)
 
-		ser.write(0x01)
-		for i in range(0, 13):
-			ser.write(0x00)
-		ser.flush()
-		print " "
+    if len(bytes) == 7:
+        if checksum_total == checksum:
+            print "[OK]"
+
+        print "C0",
+        ser.write(0xC0)
+        checksum_send = 0x00
+        for i in range(0, 20):
+            send_byte = 0x00
+            print str(send_byte),
+            checksum_send = checksum_send ^ send_byte
+            ser.write(send_byte)
+
+        print str(checksum_send),
+        ser.write(checksum_send)
+        ser.flush()
+        print "[SENT] "
