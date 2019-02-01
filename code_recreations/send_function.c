@@ -1,25 +1,27 @@
 bool LGJCbord::send(LGJCbord *this)
 {
-  char checksum_calc; // dl@1
-  signed int counter; // eax@1
-  int bytes_sent; // eax@3
+  char checksum_calc;
+  signed int counter;
+  int bytes_sent;
+  char* other_checksum_variable = *((_BYTE *)this + 38);
+  char* buffer = (_BYTE *)this + 39;
   // Seems to move things around? Maybe taking from 1 buffer to another to send so it can do a repeat send if something went wrong?
-  *((_BYTE *)this + 39) = *((_BYTE *)this + 32);
-  *((_BYTE *)this + 40) = *((_BYTE *)this + 33);
-  *((_BYTE *)this + 41) = *((_BYTE *)this + 34);
-  *((_BYTE *)this + 42) = *((_BYTE *)this + 35);
-  *((_BYTE *)this + 43) = *((_BYTE *)this + 36);
-  *((_BYTE *)this + 44) = *((_BYTE *)this + 37);
+  buffer[0] = *((_BYTE *)this + 32);  // This must contain 0xC0
+  buffer[1] = *((_BYTE *)this + 33);
+  buffer[2]  = *((_BYTE *)this + 34);
+  buffer[3] = *((_BYTE *)this + 35);
+  buffer[4]  = *((_BYTE *)this + 36);
+  buffer[5]  = *((_BYTE *)this + 37);
 
   checksum_calc = 0;
   counter = 1;
   do
-    checksum_calc ^= *((_BYTE *)this + counter++ + 39);
+    checksum_calc ^= buffer[counter++];
   while ( counter <= 5 );
 
-  *((_BYTE *)this + 38) = checksum_calc;
-  *((_BYTE *)this + 45) = checksum_calc;  // Could be stored for later on, and maybe it is required in the response to confirm it read it right?
+  other_checksum_variable = checksum_calc;
+  buffer[6] = checksum_calc;  // Could be stored for later on, and maybe it is required in the response to confirm it read it right?
 
-  bytes_sent = _lgjSCI::send(*((_lgjSCI **)this + 5), (char *)this + 39, 7u);   // Could be _lgjSCI::send(pointer_to_array, offset?, length);
+  bytes_sent = _lgjSCI::send(serial_port_object, buffer, 7);
   return bytes_sent == 7;
 }
