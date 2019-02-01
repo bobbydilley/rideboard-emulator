@@ -1,7 +1,5 @@
 # OpenLSA
-Open Large Scale Attraction Emulation - An emulator for the ride boards in Let's Go Jungle Special, The House Of The Dead 4 Special, and possibly Jurassic Park Special
-
-![LGJS Logo](https://vignette.wikia.nocookie.net/logopedia/images/1/1e/Lets_Go_Jungle_Special_Logo_1_a.gif/revision/latest?cb=20140213234611) ![HOTD4S Logo](https://vignette.wikia.nocookie.net/houseofthedead/images/4/42/Hotd4sp.png/revision/latest?cb=20170221115159)
+Open Large Scale Attraction Emulator (OpenLSA) is an emulator for the ride boards in Let's Go Jungle Special, The House Of The Dead 4 Special, and possibly Jurassic Park Special. The project aims to document the protocol so that large attraction games using these boards, can be played at home.
 
 ## Game Information
 
@@ -16,10 +14,16 @@ ln -s /dev/tts/0 /dev/ttyS0
 ## Protocol Information
 
 - Baud Rate: 115200
-- Recive's 7 bytes a go
+- Recive: 7 bytes a go
   - 1st byte is always 0xC0
   - 2nd byte is checksum which is the exclusive bitwise or (^) operation over the next 5 payload bytes
   - 3rd to 7th byte is payload
+- Send: 22 bytes a go
+  - 1st byte is always 0xC0
+  - 2nd to 21st byte is payload
+  - 22nd byte is checksum which is the exclusive bitwise or (^) operation over the previous 20 bytes.
+
+The question remains, why is the checksum at the start on the way out, and at the end on the way in? Possibly I'm confusing myself here, and the checksum should come at the start but looking at the code it doesn't seem to.
 
 ## Emulator Information
 
