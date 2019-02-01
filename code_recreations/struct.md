@@ -1,0 +1,57 @@
+The LGJCbord struct memory layout:
+
+      005: serial port object
+      008: set to value 28 on init
+      009: set to value 32 on init
+      010: set to value 00 on init
+      012: Set to 1 on init
+      016: Set to 0 on init
+      018: Open Fail is 0x00 Success is 0x01
+      020: The serial port object probably
+      024: CBord enable
+      025: Check of CLASS RECEIVE BUFFER OKAY? set to 0 on init
+      026: wont send if 1 (test mode no send?)
+
+      031: Some variable that causes a branch
+32 -> 037: CLASS SEND BUFFER
+      038: some checksum variable
+39 -> 045: SERIAL SEND BUFFER
+46 -> 067: CLASS RECEIVE BUFFER
+68 -> 195: SERIAL RECIEVE BUFFER
+      196: int sent okay? set to 0 on init
+      200: int Received Status? gets set to 1 on init
+
+      212: made up of a 24bit number from (50, 51, 52)
+      216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
+      217: Set to 0 if the bit 6 of 52 doesn't equal 0
+      240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
+
+      324: Some counter
+      328: Gets set to value in 47 if value in 47 is less than 4
+
+      332: Gets incremeneted if 53 is less than 10
+      336: Gets set to what was in 53 - initially set to
+      340: If 53 is less than 10 and this is 0 then this equals 200 + 53
+
+46 - 0xC0
+47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
+48
+49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0
+50 - LOW BYTE      |
+51 - HIGH BYTE     |
+52 - HIGHEST BYTE  |
+53 - if <= 10 does some counter stuf
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66 -
+67 - CHECKSUM
