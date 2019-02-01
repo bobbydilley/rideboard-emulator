@@ -40,33 +40,38 @@ The LGJCbord struct memory layout:
       336: Gets set to what was in 53 - initially set to
       340: If 53 is less than 10 and this is 0 then this equals 200 + 53
 
-32 - 0xC0
-33 - Takes from 209 which is the command that is set I think
-34 - set to 0
-35 - Set to 0 if on test mode or whats in 289 if not
-36 - Gets set to 308
-37 - set to 131 if not in test mode?
-38 - Checksum
 
-46 - 0xC0
-47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
-48
-49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0
-50 - LOW BYTE      |
-51 - HIGH BYTE     |
-52 - HIGHEST BYTE  |
-53 - if <= 10 does some counter stuf
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66 -
-67 - CHECKSUM
+
+
+SEND:
+  32 - 0xC0
+  33 - Takes from 209 which is the command that is set I think
+  34 - set to 0
+  35 - Set to 0 if on test mode or whats in 289 if notg
+  36 - Gets set to 308
+  37 - set to 131 if not in test mode?
+  38 - Checksum
+
+RECEIVE:
+  46 - 0xC0
+  47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
+  48
+  49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0
+  50 - LOW BYTE      |
+  51 - HIGH BYTE     |
+  52 - HIGHEST BYTE  |
+  53 - if <= 10 does some counter stuf
+  54
+  55
+  56
+  57
+  58
+  59
+  60
+  61
+  62
+  63
+  64
+  65
+  66 -
+  67 - CHECKSUM
