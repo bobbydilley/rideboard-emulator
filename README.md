@@ -16,8 +16,9 @@ ln -s /dev/tts/0 /dev/ttyS0
 - Baud Rate: 115200
 - Recive: 7 bytes a go
   - 1st byte is always 0xC0
-  - 2nd byte is checksum which is the exclusive bitwise or (^) operation over the next 5 payload bytes
-  - 3rd to 7th byte is payload
+  - 2nd to 6th byte is payload
+  - 7th byte is checksum which is the exclusive bitwise or (^) operation over the last 5 payload bytes
+  
 - Send: 22 bytes a go
   - 1st byte is always 0xC0
   - 2nd to 21st byte is payload
