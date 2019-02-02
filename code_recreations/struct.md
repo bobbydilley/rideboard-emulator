@@ -27,7 +27,9 @@ The LGJCbord struct memory layout:
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
       217: Set to 0 if the bit 6 of 52 doesn't equal 0
       240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
-      256: Gets set to 0 when seat stop
+      241: possibly the last position
+      256: Gets set to 0 when seat stop - possibly a position?
+
       260: Gets set to 1 when seat stops, and has not not be 2 to set seat to stop
       268: Gets set to something when seat stops
 
@@ -52,7 +54,7 @@ The LGJCbord struct memory layout:
 SEND:
   32 - 0xC0
   33 - Takes from 209 which is the command that is set I think
-  34 - set to 0
+  34 - set to 0 - gets from 218
   35 - Set to 0 if on test mode or whats in 289 if notg
   36 - Gets set to 308
   37 - set to 131 if not in test mode?
@@ -62,7 +64,7 @@ RECEIVE:
   46 - 0xC0
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
   48
-  49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0
+  49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
   50 DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS?
   51 - HIGH BYTE     |
   52 - HIGHEST BYTE  |

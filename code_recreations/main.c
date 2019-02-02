@@ -9,6 +9,9 @@ int receiveStatus; // 200
 byte classCommand; // 209 - Set to 0x13 for test mode
 time SystemTime; // 400 - set at init.
 
+// Test Mode command: 19
+
+
 void *__cdecl LGJCbord::init(LGJCbord *this)
 {
   bool tempTestMode; // zf@1
@@ -219,7 +222,7 @@ int __cdecl LGJCbord::exec(LGJCbord *this)
     v7 = classCommand;
     *(this + 34) = 0;
     *(this + 33) = v7;
-    if ( v7 == 19 )
+    if ( v7 == 19 (TEST MODE) )
     {
       v22 = *(this + 313);
       *(this + 35) = *(this + 289);
@@ -239,24 +242,24 @@ LABEL_19:
   }
   v10 = classCommand;
   *(this + 33) = v10;
-  if ( v10 != 19 && (unsigned __int8)(v10 - 12) > 2u )
+  if ( v10 != 19 (TEST MODE) && v10 > 14 )
   {
     v11 = *(this + 308);
     *(this + 34) = 0;
     *(this + 35) = 0;
     *(this + 36) = v11;
-    if ( v10 != 19 )
+    if ( v10 != 19 (TEST MODE) )
       goto LABEL_27;
 LABEL_46:
     *((_BYTE *)this + 37) = *((_BYTE *)this + 313);
     goto LABEL_19;
   }
-  v13 = *((_BYTE *)this + 218);
-  *((_BYTE *)this + 35) = *((_BYTE *)this + 289);
+  v13 = *(this + 218);
+  *(this + 35) = *(this + 289);
   v14 = *(this + 308);
   *(this + 34) = v13;
   *(this + 36) = v14;
-  if ( v10 == 19 )
+  if ( v10 == 19 (TEST MODE) )
     goto LABEL_46;
 LABEL_27:
   *((_BYTE *)this + 37) = 0;
@@ -267,7 +270,7 @@ LABEL_20:
   if (charactersSentStatus) {
     *(this + 204) = 0;
 LABEL_63:
-    *((_BYTE *)this + 208) = 0;
+    *(this + 208) = 0;
     goto LABEL_28;
   }
   if ( receiveStatus == 0 )
@@ -601,7 +604,7 @@ void __cdecl LGJCbord::set_seat_param(LGJCbord *this)
   char v18; // al@93
 
   v1 = 0;
-  v2 = *((_DWORD *)this + 69);
+  v2 = *(this + 276);
   if ( !v2 )
   {
     v3 = *((_DWORD *)this + 65);
@@ -614,12 +617,12 @@ void __cdecl LGJCbord::set_seat_param(LGJCbord *this)
     {
       if ( *((_DWORD *)this + 56) != 3 )
       {
-        if ( *((_BYTE *)this + 288) && *((_BYTE *)this + 241) != *((_BYTE *)this + 272) )
+        if ( *(this + 288) && *(this + 241) != *(this + 272) )
         {
-          *((_BYTE *)this + 256) = 0;
-          *((_DWORD *)this + 65) = 1;
-          *((_DWORD *)this + 67) = 0;
-          *((_BYTE *)this + 288) = 0;
+          *(this + 256) = 0;
+          *(this + 260) = 1;
+          *(this + 268) = 0;
+          *(this + 288) = 0;
           v3 = 1;
         }
         goto LABEL_8;
