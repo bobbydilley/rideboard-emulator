@@ -13,7 +13,8 @@ The LGJCbord struct memory layout:
       026: wont send if 1 (test mode no send?)
 
       031: Some variable that causes a branch
-32 -> 038: CLASS SEND BUFFER
+32 -> 037: CLASS SEND BUFFER
+38 checksum variable
 39 -> 045: SERIAL SEND BUFFER
 46 -> 067: CLASS RECEIVE BUFFER
 68 -> 195: SERIAL RECIEVE BUFFER
@@ -42,6 +43,11 @@ The LGJCbord struct memory layout:
 
 
 
+32 - 0xC0
+33 - 209 (Command)
+35 -> 289 (or 0 in test mode when 33 is 0x13)
+36 -> 308
+37 -> 313 (or 0 in test mode when 33 is 0x13)
 
 SEND:
   32 - 0xC0
@@ -57,21 +63,32 @@ RECEIVE:
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
   48
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0
-  50 - LOW BYTE      |
+  50 DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS?
   51 - HIGH BYTE     |
   52 - HIGHEST BYTE  |
   53 - if <= 10 does some counter stuf
   54
-  55
-  56
-  57
-  58
-  59
-  60
-  61
-  62
+  55 - DWORD
+  56 - CAN BE 3
+  57 - 55
+  58 - 55
+  59 - DWORD
+  60 - 59
+  61 - SWITCH CASE CAN BE 1 or 2
+  62 - 59
   63
   64
   65
   66 -
   67 - CHECKSUM
+
+  V1 = &61
+  SELECT CASE V1:
+    CASE 1:
+      IF &56 != 3:
+        V1 = 3
+        IF &49 > 0XC0 || !(&49 & 1):
+          V1 = 2
+        &56 = V1
+      return V1
+    CASE 2:
