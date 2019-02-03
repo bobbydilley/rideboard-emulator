@@ -1,0 +1,26 @@
+resetSendParam()
+setProcessMode(int)
+setSeatParam(int, int, int) [DONE]
+setSeatParamStop(int) [DONE]
+setSeatParamBase(int, int, int)
+setSeatParamBaseClear(int)
+set_seat_param()  [DONE]
+check_seat_param()  [DONE]
+set_LED_param()
+setLEDParam(float)
+setLEDPat()
+send()
+recv()
+set_param()
+set_send_data()
+set_recv_data()
+set_hard_report_air()
+set_hard_report_sw()
+data_init()
+init()  [DONE]
+LGJCbord()
+exec()  [DONE]
+term()
+~LGJCbord()
+setGameStatusADV()
+getProcessMode()
