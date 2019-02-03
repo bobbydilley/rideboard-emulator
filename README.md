@@ -44,6 +44,14 @@ When the machine is in test mode this is repeated indefinately:
 C0 13 00 00 00 00 13
 ```
 
+When dummy serial is turned on, and its waiting for the INITIALIZE button:
+
+```
+C0 02 00 00 01 00 03
+```
+
+Maybe the buttons are connected to JVS as well?
+
 ## Emulator Information
 
 The emulation is written in _python 2.7_ which you must have installed.

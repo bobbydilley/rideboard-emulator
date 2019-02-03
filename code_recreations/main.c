@@ -199,13 +199,13 @@ int __cdecl LGJCbord::exec(LGJCbord *this)
   if ( BYTE1(v3) & 0x20 )
     *(this + 217) = 0;
   v4 = *(this + 47);
-  if (v4 - 2 <= 2)
+  if (v4  <= 4)
   {
     ++*(this + 324);
     *(this + 328) = v4;
   }
   v5 = *(this + 53);
-  if ( (v5 - 1) <= 9 )
+  if ( v5 <= 10 )
   {
     v6 = *(this + 255);
     ++*(this + 332);
