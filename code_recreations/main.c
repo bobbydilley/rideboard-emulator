@@ -909,3 +909,445 @@ int __cdecl LGJCbord::setSeatParamStop(LGJCbord *this, int a2)
   }
   return result;
 }
+
+LGJCbord *__cdecl LGJCbord::resetSendParam(LGJCbord *this)
+{
+  LGJCbord *result; // eax@1
+
+  result = this;
+  *(this + 220) = 0;
+  *(this + 240) = 0;
+  *(this + 218) = 0;
+  *((_DWORD *)this + 56) = 3;
+  *(this + 241) = 0;
+  *((_DWORD *)this + 61) = 0;
+  *((_DWORD *)this + 63) = 0;
+  *((_DWORD *)this + 57) = 0;
+  *(this + 232) = 0;
+  *(this + 256) = 0;
+  *((_DWORD *)this + 65) = 0;
+  *((_DWORD *)this + 67) = 0;
+  *(this + 272) = 0;
+  *((_DWORD *)this + 69) = 0;
+  *((_DWORD *)this + 71) = 0;
+  *(this + 288) = 0;
+  *(this + 289) = 0;
+  *((_DWORD *)this + 73) = 0;
+  *((_DWORD *)this + 74) = 0;
+  *((_DWORD *)this + 75) = 0;
+  *((_DWORD *)this + 76) = 0;
+  *(this + 308) = 0;
+  *(this + 310) = 64;
+  *(this + 311) = 0;
+  *(this + 312) = 0;
+  *(this + 313) = 0;
+  *(this + 320) = 1;
+  *(this + 314) = 0;
+  *(this + 315) = 0;
+  *((_DWORD *)this + 79) = 0;
+  return result;
+}
+
+
+int __cdecl LGJCbord::setProcessMode(LGJCbord *this, int newProcessMode) {
+  int result; // eax@1
+  LOBYTE(result) = 0;
+  if ( newProcessMode <= 4 ) {
+    *(this + 2) = newProcessMode;
+    LOBYTE(result) = 1;
+  }
+  return result;
+}
+
+int __cdecl LGJCbord::setSeatParamBase(LGJCbord *this, unsigned __int8 a2)
+{
+  signed int v2; // eax@1
+  unsigned __int8 v3; // al@4
+  unsigned __int8 v4; // dl@5
+  int v5; // ecx@5
+  int v6; // eax@9
+  int result; // eax@9
+
+  v2 = *((unsigned __int8 *)this + 344);
+  if ( v2 != 13 )
+  {
+    if ( v2 > 13 )
+    {
+      if ( v2 == 14 )
+      {
+        v3 = 0;
+        goto LABEL_5;
+      }
+    }
+    else if ( v2 == 12 )
+    {
+      v3 = a2;
+      goto LABEL_5;
+    }
+    goto LABEL_4;
+  }
+  if ( !a2 || a2 > 0x6Fu || (v3 = a2 - 48, a2 <= 0x3Fu) )
+LABEL_4:
+    v3 = a2;
+LABEL_5:
+  v4 = v3;
+  v5 = 1;
+  if ( v3 )
+  {
+    LOBYTE(v5) = 2;
+    if ( v3 > 0x6Fu )
+    {
+      LOBYTE(v5) = 3;
+      if ( (unsigned __int8)(v3 - 112) > 0xFu )
+        v5 = 5 - ((unsigned __int8)(v3 + 112) < 0x30u);
+    }
+  }
+  v6 = (unsigned __int16)(*((unsigned int *)this + 55) + 1);
+  *((_DWORD *)this + 55) = v6;
+  result = v6 + 1;
+  if ( v5 == 1 )
+  {
+    if ( *((_DWORD *)this + 69) )
+    {
+      *((_BYTE *)this + 272) = v4;
+      *((_DWORD *)this + 69) = 1;
+      *((_DWORD *)this + 71) = 0;
+    }
+  }
+  else if ( v5 >= 1 && v5 <= 5 )
+  {
+    *((_BYTE *)this + 272) = v4;
+    *((_DWORD *)this + 69) = v5;
+    *((_DWORD *)this + 71) = result;
+  }
+  return result;
+}
+
+int __cdecl LGJCbord::setSeatParamBaseClear(LGJCbord *this, int a2)
+{
+  int result; // eax@1
+
+  result = *((_DWORD *)this + 69);
+  if ( result )
+  {
+    *((_BYTE *)this + 272) = 0;
+    *((_DWORD *)this + 69) = 1;
+    *((_DWORD *)this + 71) = a2;
+  }
+  return result;
+}
+
+char __cdecl LGJCbord::set_LED_param(LGJCbord *this)
+{
+  char v1; // dl@1
+  char v2; // cl@2
+  char result; // al@3
+
+  v1 = *((_BYTE *)this + 312);
+  if ( v1 )
+  {
+    result = 0;
+    if ( v1 != -1 )
+      result = *((_BYTE *)this + 312);
+    *((_BYTE *)this + 308) = result;
+  }
+  else
+  {
+    v2 = *((_BYTE *)this + 311);
+    if ( v2 )
+    {
+      result = v2 == 32;
+      if ( v2 == 32 || v2 == 16 || v2 == 48 || v2 == -32 || v2 == -16 )
+        v2 |= *((_BYTE *)this + 309);
+      *((_BYTE *)this + 308) = v2;
+    }
+    else
+    {
+      result = *((_BYTE *)this + 310) | *((_BYTE *)this + 309);
+      *((_BYTE *)this + 308) = result;
+    }
+  }
+  return result;
+}
+
+LGJCbord *__cdecl LGJCbord::setLEDPat(LGJCbord *this)
+{
+  int v1; // edx@1
+  LGJCbord *result; // eax@1
+  _sRandom *v3; // [esp+0h] [ebp-8h]@0
+
+  v1 = (unsigned __int8)LGJCbord::setLEDPat(void)::tbl_LED_pat[_sRandom::getRandMT_U32(v3) & 7];
+  result = this;
+  *((_BYTE *)this + 309) = v1 & 0xF;
+  return result;
+}
+
+void __cdecl LGJCbord::set_param(LGJCbord *this)
+{
+  char v1; // dl@3
+  char v2; // cl@4
+  char v3; // al@14
+  int v4; // eax@17
+  int v5; // eax@19
+  int v6; // eax@21
+  int v7; // eax@23
+  int v8; // ecx@26
+
+  if ( g_bTestMode )
+  {
+    if ( !acpSystem::slError_ )
+    {
+LABEL_11:
+      LGJCbord::set_seat_param(this);
+      return;
+    }
+    v1 = *((_BYTE *)this + 312);
+    if ( !v1 )
+      goto LABEL_4;
+LABEL_14:
+    v3 = 0;
+    if ( v1 != -1 )
+      v3 = v1;
+    goto LABEL_16;
+  }
+  if ( !g_iSystemShutdown )
+  {
+    v4 = *((_DWORD *)this + 73);
+    if ( v4 <= 0 )
+      *((_BYTE *)this + 289) &= 0xFEu;
+    else
+      *((_DWORD *)this + 73) = v4 - 1;
+    v5 = *((_DWORD *)this + 74);
+    if ( v5 <= 0 )
+      *((_BYTE *)this + 289) &= 0xFBu;
+    else
+      *((_DWORD *)this + 74) = v5 - 1;
+    v6 = *((_DWORD *)this + 75);
+    if ( v6 <= 0 )
+      *((_BYTE *)this + 289) &= 0xFDu;
+    else
+      *((_DWORD *)this + 75) = v6 - 1;
+    v7 = *((_DWORD *)this + 76);
+    if ( v7 <= 0 )
+      *((_BYTE *)this + 289) &= 0xF7u;
+    else
+      *((_DWORD *)this + 76) = v7 - 1;
+    if ( *((_BYTE *)this + 315) )
+    {
+      v8 = (*((_DWORD *)this + 79) + 1) % 90;
+      *((_BYTE *)this + 314) = v8 <= 59;
+      *((_DWORD *)this + 79) = v8 + 1;
+    }
+  }
+  v1 = *((_BYTE *)this + 312);
+  if ( v1 )
+    goto LABEL_14;
+LABEL_4:
+  v2 = *((_BYTE *)this + 311);
+  if ( v2 )
+  {
+    if ( v2 == 32 || v2 == 16 || v2 == 48 || v2 == -32 || v2 == -16 )
+      v2 |= *((_BYTE *)this + 309);
+    *((_BYTE *)this + 308) = v2;
+    goto LABEL_11;
+  }
+  v3 = *((_BYTE *)this + 310) | *((_BYTE *)this + 309);
+LABEL_16:
+  *((_BYTE *)this + 308) = v3;
+  LGJCbord::set_seat_param(this);
+}
+
+char __cdecl LGJCbord::set_send_data(LGJCbord *this)
+{
+  bool v1; // zf@1
+  char v2; // al@2
+  char result; // al@4
+  char v4; // bl@5
+  char v5; // dl@6
+  char v6; // dl@8
+  char v7; // bl@9
+  char v8; // dl@10
+
+  v1 = *((_BYTE *)this + 25) == 0;
+  *((_BYTE *)this + 32) = -64;
+  if ( !v1 )
+  {
+    v4 = *((_BYTE *)this + 209);
+    *((_BYTE *)this + 33) = v4;
+    result = v4 == 19;
+    if ( v4 == 19 || (unsigned __int8)(v4 - 12) <= 2u )
+    {
+      result = *((_BYTE *)this + 218);
+      *((_BYTE *)this + 35) = *((_BYTE *)this + 289);
+      v6 = *((_BYTE *)this + 308);
+      *((_BYTE *)this + 34) = result;
+      *((_BYTE *)this + 36) = v6;
+      if ( v4 != 19 )
+        goto LABEL_7;
+    }
+    else
+    {
+      v5 = *((_BYTE *)this + 308);
+      *((_BYTE *)this + 34) = 0;
+      *((_BYTE *)this + 35) = 0;
+      *((_BYTE *)this + 36) = v5;
+      if ( v4 != 19 )
+      {
+LABEL_7:
+        *((_BYTE *)this + 37) = 0;
+        *((_BYTE *)this + 38) = 0;
+        return result;
+      }
+    }
+    v7 = *((_BYTE *)this + 313);
+    *((_BYTE *)this + 38) = 0;
+    *((_BYTE *)this + 37) = v7;
+    return result;
+  }
+  v2 = *((_BYTE *)this + 209);
+  *((_BYTE *)this + 34) = 0;
+  *((_BYTE *)this + 33) = v2;
+  if ( v2 == 19 )
+  {
+    v8 = *((_BYTE *)this + 313);
+    *((_BYTE *)this + 35) = *((_BYTE *)this + 289);
+    *((_BYTE *)this + 37) = v8;
+  }
+  else
+  {
+    *((_BYTE *)this + 35) = 0;
+    *((_BYTE *)this + 37) = 0;
+  }
+  result = *((_BYTE *)this + 308);
+  *((_BYTE *)this + 38) = 0;
+  *((_BYTE *)this + 36) = result;
+  return result;
+}
+
+nt __cdecl LGJCbord::set_recv_data(LGJCbord *this)
+{
+  int v1; // edx@1
+  unsigned __int8 v2; // al@1
+  char v3; // dl@8
+  int v4; // edx@10
+  int result; // eax@10
+
+  v1 = (*((unsigned __int8 *)this + 52) << 16) | (*((unsigned __int8 *)this + 51) << 8) | *((unsigned __int8 *)this + 50);
+  v2 = *((_BYTE *)this + 49);
+  *((_DWORD *)this + 53) = v1;
+  if ( v2 & 0xF && v2 <= 0xCu )
+    *((_BYTE *)this + 240) = v2;
+  if ( BYTE1(v1) & 0x10 )
+    *((_BYTE *)this + 216) = 0;
+  if ( BYTE1(v1) & 0x20 )
+    *((_BYTE *)this + 217) = 0;
+  v3 = *((_BYTE *)this + 47);
+  if ( (unsigned __int8)(v3 - 2) <= 2u )
+  {
+    ++*((_DWORD *)this + 81);
+    *((_BYTE *)this + 328) = v3;
+  }
+  v4 = *((unsigned __int8 *)this + 53);
+  result = v4 - 1;
+  if ( (unsigned __int8)(v4 - 1) <= 9u )
+  {
+    result = *((_DWORD *)this + 85);
+    ++*((_DWORD *)this + 83);
+    *((_BYTE *)this + 336) = v4;
+    if ( !result )
+    {
+      result = (unsigned __int8)v4 + 200;
+      *((_DWORD *)this + 85) = result;
+    }
+  }
+  return result;
+}
+
+int __cdecl LGJCbord::set_hard_report_air(LGJCbord *this)
+{
+  int v1; // eax@1
+  int v2; // edx@1
+  float v3; // xmm0_4@2
+  float v5; // ST08_4@3
+  signed int v6; // esi@3
+  int result; // eax@3
+  signed int v8; // eax@16
+  _sSystem *v9; // [esp+0h] [ebp-18h]@0
+  _sSystem *v10; // [esp+0h] [ebp-18h]@1
+
+  v1 = _sSystem::getTime(v9);
+  v2 = v1 - *((_DWORD *)this + 100);
+  if ( v2 < 0 )
+  {
+    v8 = v2 & 1 | ((unsigned int)(v1 - *((_DWORD *)this + 100)) >> 1);
+    v3 = (float)v8 + (float)v8;
+  }
+  else
+  {
+    v3 = (float)v2;
+  }
+  _FST7 = (float)(v3 * 0.001);
+  __asm { frndint }
+  v5 = _FST7;
+  v6 = (signed int)v5;
+  *((_DWORD *)this + 100) = _sSystem::getTime(v10);
+  result = *((unsigned __int8 *)this + 35);
+  if ( result & 0x10 )
+    *((_DWORD *)this + 91) += v6;
+  if ( result & 0x20 )
+    *((_DWORD *)this + 97) += v6;
+  if ( result & 1 )
+    *((_DWORD *)this + 92) += v6;
+  if ( result & 2 )
+    *((_DWORD *)this + 98) += v6;
+  if ( result & 4 )
+    *((_DWORD *)this + 93) += v6;
+  if ( result & 8 )
+    *((_DWORD *)this + 99) += v6;
+  return result;
+}
+
+int __cdecl LGJCbord::set_hard_report_sw(LGJCbord *this)
+{
+  int result; // eax@11
+
+  if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(1, 0x2000000) )
+    ++*((_DWORD *)this + 88);
+  if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(2, 0x2000000) )
+    ++*((_DWORD *)this + 94);
+  if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(1, 0x800000) )
+    ++*((_DWORD *)this + 89);
+  if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(2, 0x800000) )
+    ++*((_DWORD *)this + 95);
+  if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(1, 0x400000) )
+    ++*((_DWORD *)this + 90);
+  result = _sInterfaceJvs::checkTrgOn(2, 0x400000);
+  if ( (_BYTE)result )
+    ++*((_DWORD *)this + 96);
+  return result;
+}
+
+char __cdecl LGJCbord::setGameStatusADV(LGJCbord *this)
+{
+  char v1; // cl@1
+  char result; // al@3
+  acpSystem *v3; // [esp+0h] [ebp-8h]@0
+
+  v1 = *((_BYTE *)this + 209);
+  if ( v1 == 23 || v1 == 17 || v1 == 18 )
+  {
+    result = 25 - ((unsigned __int8)acpSystem::isFreePlay(v3) < 1u);
+    *((_BYTE *)this + 209) = result;
+  }
+  else
+  {
+    result = 6 - ((unsigned __int8)acpSystem::isFreePlay(v3) < 1u);
+    *((_BYTE *)this + 209) = result;
+  }
+  return result;
+}
+
+int __cdecl LGJCbord::getProcessMode(LGJCbord *this)
+{
+  return *((_DWORD *)this + 1);
+}

@@ -58,10 +58,12 @@ The LGJCbord struct memory layout:
 36 -> 308
 37 -> 313 (or 0 in test mode when 33 is 0x13)
 
+41 - Has the seat command in it
+
 SEND:
   32 - 0xC0
   33 - Takes from 209 which is the command that is set I think
-  34 - set to 0 - gets from 218
+  34 - set to 0 - gets from 218 (SEAT COMMAND - This is the one that is displayed)
   35 - Set to 0 if on test mode or whats in 289 if notg
   36 - Gets set to 308
   37 - set to 131 if not in test mode?
