@@ -34,8 +34,8 @@ The LGJCbord struct memory layout:
       268: Gets set to something when seat stops
 
       289: sets whats in 35
-      313: Something about teest mode
-
+      313: Something about teest mode - lights/air I think
+      320: If this != 0, then chair is set to 0x51 else 0x21
       324: Some counter
       328: Gets set to value in 47 if value in 47 is less than 4
 

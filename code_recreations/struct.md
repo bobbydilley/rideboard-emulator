@@ -21,7 +21,7 @@ The LGJCbord struct memory layout:
       196: int sent okay? set to 0 on init
       200: int Received Status? gets set to 1 on init
 
-      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6)
+      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED
 
       212: made up of a 24bit number from (50, 51, 52)
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
@@ -34,8 +34,14 @@ The LGJCbord struct memory layout:
       268: Gets set to something when seat stops
 
       289: sets whats in 35
-      313: Something about teest mode
+      308: seems to be outputs?
+      310: Life LED? Shows life counter on an LED maybe?
 
+      312: gets set to 0xff on test mode.
+
+      313: Something about teest mode
+      314: seems to be outputs?
+      320: means seat it okay?
       324: Some counter
       328: Gets set to value in 47 if value in 47 is less than 4
 
@@ -44,6 +50,7 @@ The LGJCbord struct memory layout:
       340: If 53 is less than 10 and this is 0 then this equals 200 + 53
 
 
+      404 - think its 404 big?
 
 32 - 0xC0
 33 - 209 (Command)
@@ -63,7 +70,7 @@ SEND:
 RECEIVE:
   46 - 0xC0
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
-  48
+  48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!)
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
   50 DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS?
   51 - HIGH BYTE     |
@@ -94,3 +101,33 @@ RECEIVE:
         &56 = V1
       return V1
     CASE 2:
+
+
+
+At boot up it checks if test mode is enabled:
+        *(int8_t *)_sInterfaceJvsManager::_bUseCredit = 0x0;
+        int variable = (*g_pCbord + 48) & 0xff;
+        if ((variable != 0x10) && (variable != 0x1a)) {
+                (*g_pCbord + 209) = 0x13;
+        }
+        else {
+                (*g_pCbord + 209) = 0x1a;
+        }
+        LGJCbord::resetSendParam();
+        *(int8_t *)(*g_pCbord + 0x138) = 0xff;
+        esi = operator new(0xa8);
+        TestMenu::TestMenu();
+        *g_pTestMenu = esi;
+        TestMenu::set(esi);
+        new_Player();
+        eax = mtrLoopManager::setMode(*pLoopManager);
+
+
+Gun test spinning the seat:
+if (*(int8_t *)(*g_pCbord + 0x140) != 0x0) {
+          var_24 = 0x51;
+  }
+  else {
+          var_24 = 0x21;
+  }
+  LGJCbord::setSeatParam(*g_pCbord, var_24, 0x0);

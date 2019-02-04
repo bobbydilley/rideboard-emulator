@@ -19,7 +19,7 @@ checksum_total = 0x00
 while 1:
     byte = ser.read(1)
     bytes.append(ord(byte))
-    print byte.encode('hex').upper(),
+    print byte.encode('hex').upper()
 
 
     if len(bytes) < 7:
