@@ -36,10 +36,19 @@ while 1:
             print "C0",
             ser.write(0xC0)
             checksum_send = 0x00
-            
-            
-            for i in range(0, 20):
-                send_byte = 0xFF
+
+            send_byte = 0xFE
+            print str(send_byte),
+            checksum_send = checksum_send ^ send_byte
+            ser.write(send_byte)
+
+            send_byte = 0x1A
+            print str(send_byte),
+            checksum_send = checksum_send ^ send_byte
+            ser.write(send_byte)
+
+            for i in range(0, 18):
+                send_byte = 0x55
                 print str(send_byte),
                 checksum_send = checksum_send ^ send_byte
                 ser.write(send_byte)

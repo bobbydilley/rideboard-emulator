@@ -23,7 +23,10 @@ The LGJCbord struct memory layout:
 
       209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED
 
-      212: made up of a 24bit number from (50, 51, 52)
+      212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215
+      213: Bit masks of limit sensors
+      214: Bit masks of limit sensors
+      215: Bit mask of sensors etc.
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
       217: Set to 0 if the bit 6 of 52 doesn't equal 0
       240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
@@ -41,7 +44,7 @@ The LGJCbord struct memory layout:
 
       313: Something about teest mode
       314: seems to be outputs?
-      320: means seat it okay?
+      320: means seat it okay? Might be front or rear position selector?
       324: Some counter
       328: Gets set to value in 47 if value in 47 is less than 4
 
@@ -72,24 +75,24 @@ SEND:
 RECEIVE:
   46 - 0xC0
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
-  48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!)
+  48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!) - should not equal -1? If it equals 26 the ride is stopped.
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
-  50 DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS?
+  50 - DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS? I think these are the switches
   51 - HIGH BYTE     |
   52 - HIGHEST BYTE  |
   53 - if <= 10 does some counter stuf
   54
   55 - DWORD
   56 - CAN BE 3
-  57 - 55
-  58 - 55
-  59 - DWORD
-  60 - 59
-  61 - SWITCH CASE CAN BE 1 or 2
-  62 - 59
-  63
-  64
-  65
+  57 - 55                 - CONTROL BOARD INFO SUM
+  58 - 55                 - CONTROL BOARD INFO SUM
+  59 - DWORD              - CONTROL BOARD INFO SUM
+  60 - 59 CONTROL BOARD INFO
+  61 - SWITCH CASE CAN BE 1 or 2 CONTROL BOARD INFO
+  62 - 59 CONTROL BOARD INFO
+  63 - CONTROL BOARD INFO
+  64 - CONTROL BOARD INFO
+  65 - CONTROL BOARD INFO
   66 -
   67 - CHECKSUM
 
