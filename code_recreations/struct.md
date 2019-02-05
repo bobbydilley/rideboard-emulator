@@ -23,7 +23,7 @@ The LGJCbord struct memory layout:
 
       209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED (classCommand)
 
-      212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215
+      212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215 (50 0x10 is initialise button)
       213: Bit masks of limit sensors (This is correct, seat lock/unlock is 0x2)
       214: Bit masks of limit sensors
       215: Bit mask of sensors etc.
@@ -83,7 +83,7 @@ RECEIVE:
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
   48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!) - should not equal -1? If it equals 26 the ride is stopped.
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
-  50 - DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS? I think these are the switches
+  50 - DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS? I think these are the switches &0x10 is initialise
   51 - HIGH BYTE     |       (THIS REQUIRES TO BE && with 0x10 and 0x20 to make some other things 0 - so probably a good start)
   52 - HIGHEST BYTE  |
   53 - if <= 10 does some counter stuf
