@@ -24,7 +24,7 @@ The LGJCbord struct memory layout:
       209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED (classCommand)
 
       212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215
-      213: Bit masks of limit sensors
+      213: Bit masks of limit sensors (This is correct, seat lock/unlock is 0x2)
       214: Bit masks of limit sensors
       215: Bit mask of sensors etc.
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
