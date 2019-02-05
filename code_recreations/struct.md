@@ -21,7 +21,7 @@ The LGJCbord struct memory layout:
       196: int sent okay? set to 0 on init
       200: int Received Status? gets set to 1 on init
 
-      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED
+      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED - 3 seems to be faliure.
 
       212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215
       213: Bit masks of limit sensors
