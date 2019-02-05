@@ -21,7 +21,7 @@ The LGJCbord struct memory layout:
       196: int sent okay? set to 0 on init
       200: int Received Status? gets set to 1 on init
 
-      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED
+      209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED (classCommand)
 
       212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215
       213: Bit masks of limit sensors
@@ -29,6 +29,7 @@ The LGJCbord struct memory layout:
       215: Bit mask of sensors etc.
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
       217: Set to 0 if the bit 6 of 52 doesn't equal 0
+      218: Sets what in 34 (Probably seat command?)
       240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
       241: possibly the last position
       256: Gets set to 0 when seat stop - possibly a position?
@@ -37,12 +38,16 @@ The LGJCbord struct memory layout:
       268: Gets set to something when seat stops
 
       289: sets whats in 35
-      308: seems to be outputs?
+
+
+      292 - 304 - Some sort of counters that go down by 1 each time. Once the counters reach 0 289 gets bits mashed off.
+
+      308: seems to be outputs? gets put into 36
       310: Life LED? Shows life counter on an LED maybe?
 
       312: gets set to 0xff on test mode.
 
-      313: Something about teest mode
+      313: Something about teest mode populates 37.
       314: seems to be outputs?
       320: means seat it okay? Might be front or rear position selector?
       324: Some counter
@@ -52,7 +57,8 @@ The LGJCbord struct memory layout:
       336: Gets set to what was in 53 - initially set to
       340: If 53 is less than 10 and this is 0 then this equals 200 + 53
 
-
+      364 -> 396 - Somthing to do with hard air report
+      400 -> 404 - Something to do with timing of hard-air-report (Old time save variable)
       404 - think its 404 big?
 
 32 - 0xC0
@@ -65,11 +71,11 @@ The LGJCbord struct memory layout:
 
 SEND:
   32 - 0xC0
-  33 - Takes from 209 which is the command that is set I think
+  33 - Takes from 209 which is the command that is set I think (Gets from class command)
   34 - set to 0 - gets from 218 (SEAT COMMAND - This is the one that is displayed)
-  35 - Set to 0 if on test mode or whats in 289 if notg
-  36 - Gets set to 308
-  37 - set to 131 if not in test mode?
+  35 - Set to 0 if on test mode or whats in 289 if notg (This seems to be some sort of bit patten)
+  36 - Gets set to 308 - Possibly Outputs? (it at 1 on startup)
+  37 - set to 131 if not in test mode? - Gets data from 313
   38 - Checksum
 
 RECEIVE:
@@ -78,7 +84,7 @@ RECEIVE:
   48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!) - should not equal -1? If it equals 26 the ride is stopped.
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
   50 - DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS? I think these are the switches
-  51 - HIGH BYTE     |
+  51 - HIGH BYTE     |       (THIS REQUIRES TO BE && with 0x10 and 0x20 to make some other things 0 - so probably a good start)
   52 - HIGHEST BYTE  |
   53 - if <= 10 does some counter stuf
   54
