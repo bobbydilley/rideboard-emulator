@@ -15,7 +15,7 @@ ln -s /dev/tts/0 /dev/ttyS0
 
 ### Attendants Tower
 
-I beleive that the attendants tower is connected to JVS and uses the first row of system switches (tilts etc.) as some of the buttons. It could also be connected to a second JVS controller board - I'm not sure yet. OpenJVS probably has the ability to pretend to be multiple JVS boards so this isn't a massive issue.
+The attendants tower swithches are not run via JVS.
 
 ## Protocol Information
 
