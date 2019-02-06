@@ -1,5 +1,5 @@
 The LGJCbord struct memory layout:
-
+      000: Status of thing. 0 means none, 1 means its there, 2 means something about updating
       005: serial port object
       008: set to value 28 on init
       009: set to value 32 on init
