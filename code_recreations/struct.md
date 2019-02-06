@@ -50,13 +50,12 @@ The LGJCbord struct memory layout:
       313: Something about teest mode populates 37.
       314: seems to be outputs?
       320: means seat it okay? Might be front or rear position selector?
-      322: COUNTER RELATED TO 53
+
       324: COUNTER RELATED TO 47
       328: Gets set to value in 47 if value in 47 is less than 4
-
-      332: Gets incremeneted if 53 is less than 10
+      332: COUNTER RELATED TO 53
       336: Gets set to what was in 53 - initially set to
-      340: If 53 is less than 10 and this is 0 then this equals 200 + 53
+      340: Equals 53 + 200 if 255 (Some seat thing) != 1;
 
       364 -> 396 - Somthing to do with hard air report
       400 -> 404 - Something to do with timing of hard-air-report (Old time save variable)
