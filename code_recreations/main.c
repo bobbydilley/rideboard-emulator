@@ -7,7 +7,7 @@ bool somethingAboutTestMode; // 26
 int charactersSentStatus; // 196
 int receiveStatus; // 200
 byte classCommand; // 209 - Set to 0x13 for test mode
-time SystemTime; // 400 - set at init.
+time oldSystemTime; // 400 - set at init.
 
 // Test Mode command: 19
 
@@ -115,7 +115,7 @@ LABEL_3:
   time = _sSystem::getTime(theTimeObject);
   *(this + 32) = 0;
   *(this + 33) = 0;
-  SystemTime = time;
+  oldSystemTime = time;
   *(this + 34) = 0;
   *(this + 35) = 0;
   *(this + 36) = 0;
@@ -297,28 +297,28 @@ LABEL_28:
   if ( charactersSentStatus )
   {
     time = _sSystem::getTime(v24);
-    timeDifference = time - SystemTime;
-    if ( time - SystemTime < 0 ) {
+    timeDifference = time - oldSystemTime;
+    if ( time - oldSystemTime < 0 ) { // Time has wrapped around
       v23 = timeDifference & 1 | ((unsigned int)(time - SystemTime) >> 1);
       tempTimeDifference = (float)v23 + (float)v23;
     } else {
-      tempTimeDifference = (float) timeDifference;
+      tempTimeDifference = (float) timeDifference;  // Time is higher so all good
     }
     v20 = (float)(tempTimeDifference * 0.001); // 0.1%
-    SystemTime = _sSystem::getTime(v25);
+    oldSystemTime = _sSystem::getTime(v25);
     v21 = *(this + 35);
     if ( v21 & 0x10 ) // 00010000
       *(this + 364) += v20;
     if ( v21 & 0x20 ) // 00100000
       *(this + 388) += v20;
     if ( v21 & 1 ) // 00000001
-      *((_DWORD *)this + 92) += v20;
+      *((_DWORD *)this + 368) += v20;
     if ( v21 & 2 ) // 00000010
-      *((_DWORD *)this + 98) += v20;
+      *((_DWORD *)this + 392) += v20;
     if ( v21 & 4 ) // 00000100
-      *((_DWORD *)this + 93) += v20;
+      *((_DWORD *)this + 372) += v20;
     if ( v21 & 8 ) // 00001000
-      *((_DWORD *)this + 99) += v20;
+      *((_DWORD *)this + 396) += v20;
   }
   if ( _sInterfaceJvs::checkTrgOn(1, 0x2000000) )
     ++*(this + 352);
@@ -795,12 +795,12 @@ LABEL_12:
         goto LABEL_18;
       goto LABEL_28;
     case 5u:
-      v6 = *((_DWORD *)this + 56);
+      v6 = *(this + 224);
       if ( v6 )
       {
         if ( v6 == 1 )
         {
-          *((_BYTE *)this + 218) = -128;
+          *(this + 218) = 0xFF;
         }
         else
         {
@@ -1112,29 +1112,29 @@ LABEL_14:
   }
   if ( !g_iSystemShutdown )
   {
-    v4 = *((_DWORD *)this + 73);
+    v4 = *(this + 292);
     if ( v4 <= 0 )
-      *((_BYTE *)this + 289) &= 0xFEu;
+      *((_BYTE *)this + 289) &= 0xFEu; Does an & with 1111 1110 which effectively removes the last bit.
     else
       *((_DWORD *)this + 73) = v4 - 1;
-    v5 = *((_DWORD *)this + 74);
+    v5 = *(this + 296);
     if ( v5 <= 0 )
-      *((_BYTE *)this + 289) &= 0xFBu;
+      *((_BYTE *)this + 289) &= 0xFBu; Removes the third to last bit
     else
       *((_DWORD *)this + 74) = v5 - 1;
-    v6 = *((_DWORD *)this + 75);
+    v6 = *(this + 300);
     if ( v6 <= 0 )
-      *((_BYTE *)this + 289) &= 0xFDu;
+      *((_BYTE *)this + 289) &= 0xFDu; Removes the second to last bit
     else
       *((_DWORD *)this + 75) = v6 - 1;
     v7 = *((_DWORD *)this + 76);
     if ( v7 <= 0 )
-      *((_BYTE *)this + 289) &= 0xF7u;
+      *((_BYTE *)this + 289) &= 0xF7u; Removes the first bit
     else
       *((_DWORD *)this + 76) = v7 - 1;
     if ( *((_BYTE *)this + 315) )
     {
-      v8 = (*((_DWORD *)this + 79) + 1) % 90;
+      v8 = (*(this + 316) + 1) % 90;
       *((_BYTE *)this + 314) = v8 <= 59;
       *((_DWORD *)this + 79) = v8 + 1;
     }
@@ -1168,20 +1168,20 @@ char __cdecl LGJCbord::set_send_data(LGJCbord *this)
   char v7; // bl@9
   char v8; // dl@10
 
-  v1 = *((_BYTE *)this + 25) == 0;
-  *((_BYTE *)this + 32) = -64;
+  v1 = classReceiveBufferOkay == 0;
+  *(this + 32) = 0xC0;
   if ( !v1 )
   {
-    v4 = *((_BYTE *)this + 209);
-    *((_BYTE *)this + 33) = v4;
+    v4 = classCommand;
+    *(this + 33) = classCommand;
     result = v4 == 19;
-    if ( v4 == 19 || (unsigned __int8)(v4 - 12) <= 2u )
+    if ( v4 == 19 || v4 <= 14 )
     {
-      result = *((_BYTE *)this + 218);
-      *((_BYTE *)this + 35) = *((_BYTE *)this + 289);
-      v6 = *((_BYTE *)this + 308);
-      *((_BYTE *)this + 34) = result;
-      *((_BYTE *)this + 36) = v6;
+      result = *(this + 218);
+      *(this + 35) = *(this + 289);
+      v6 = *(this + 308);
+      *(this + 34) = result;
+      *(this + 36) = v6;
       if ( v4 != 19 )
         goto LABEL_7;
     }
@@ -1199,32 +1199,32 @@ LABEL_7:
         return result;
       }
     }
-    v7 = *((_BYTE *)this + 313);
+    v7 = *(this + 313);
     *((_BYTE *)this + 38) = 0;
     *((_BYTE *)this + 37) = v7;
     return result;
   }
-  v2 = *((_BYTE *)this + 209);
+  v2 = classCommand;
   *((_BYTE *)this + 34) = 0;
   *((_BYTE *)this + 33) = v2;
   if ( v2 == 19 )
   {
-    v8 = *((_BYTE *)this + 313);
-    *((_BYTE *)this + 35) = *((_BYTE *)this + 289);
-    *((_BYTE *)this + 37) = v8;
+    v8 = *(this + 313);
+    *(this + 35) = *(this + 289);
+    *(this + 37) = v8;
   }
   else
   {
-    *((_BYTE *)this + 35) = 0;
-    *((_BYTE *)this + 37) = 0;
+    *(this + 35) = 0;
+    *(this + 37) = 0;
   }
-  result = *((_BYTE *)this + 308);
-  *((_BYTE *)this + 38) = 0;
-  *((_BYTE *)this + 36) = result;
+  result = *(this + 308);
+  *(this + 38) = 0;
+  *(this + 36) = result;
   return result;
 }
 
-nt __cdecl LGJCbord::set_recv_data(LGJCbord *this)
+int __cdecl LGJCbord::set_recv_data(LGJCbord *this)
 {
   int v1; // edx@1
   unsigned __int8 v2; // al@1
@@ -1238,9 +1238,9 @@ nt __cdecl LGJCbord::set_recv_data(LGJCbord *this)
   if ( v2 & 0xF && v2 <= 0xCu )
     *((_BYTE *)this + 240) = v2;
   if ( BYTE1(v1) & 0x10 )
-    *((_BYTE *)this + 216) = 0;
+    *(this + 216) = 0;
   if ( BYTE1(v1) & 0x20 )
-    *((_BYTE *)this + 217) = 0;
+    *(this + 217) = 0;
   v3 = *((_BYTE *)this + 47);
   if ( (unsigned __int8)(v3 - 2) <= 2u )
   {
@@ -1265,7 +1265,7 @@ nt __cdecl LGJCbord::set_recv_data(LGJCbord *this)
 
 int __cdecl LGJCbord::set_hard_report_air(LGJCbord *this)
 {
-  int v1; // eax@1
+  int newTime; // eax@1
   int v2; // edx@1
   float v3; // xmm0_4@2
   float v5; // ST08_4@3
@@ -1275,35 +1275,34 @@ int __cdecl LGJCbord::set_hard_report_air(LGJCbord *this)
   _sSystem *v9; // [esp+0h] [ebp-18h]@0
   _sSystem *v10; // [esp+0h] [ebp-18h]@1
 
-  v1 = _sSystem::getTime(v9);
-  v2 = v1 - *((_DWORD *)this + 100);
-  if ( v2 < 0 )
-  {
-    v8 = v2 & 1 | ((unsigned int)(v1 - *((_DWORD *)this + 100)) >> 1);
-    v3 = (float)v8 + (float)v8;
+  newTime = _sSystem::getTime(v9);
+  v2 = newTime - oldSystemTime;
+  if ( v2 < 0 ) { // Deals with time wrap case
+    v8 = v2 & 1 | ((newTime - oldSystemTime) >> 1);
+    v3 = (float) v8 + (float) v8;
+  } else {
+    v3 = (float) v2;
   }
-  else
-  {
-    v3 = (float)v2;
-  }
-  _FST7 = (float)(v3 * 0.001);
-  __asm { frndint }
-  v5 = _FST7;
-  v6 = (signed int)v5;
-  *((_DWORD *)this + 100) = _sSystem::getTime(v10);
-  result = *((unsigned __int8 *)this + 35);
-  if ( result & 0x10 )
-    *((_DWORD *)this + 91) += v6;
-  if ( result & 0x20 )
-    *((_DWORD *)this + 97) += v6;
-  if ( result & 1 )
-    *((_DWORD *)this + 92) += v6;
-  if ( result & 2 )
-    *((_DWORD *)this + 98) += v6;
-  if ( result & 4 )
-    *((_DWORD *)this + 93) += v6;
-  if ( result & 8 )
-    *((_DWORD *)this + 99) += v6;
+
+  v6 = roundToInt((float)(v3 * 0.001));
+
+  oldSystemTime = _sSystem::getTime(v10);
+
+  result = *(this + 35);
+  if ( result & 0b 0001 0000 )
+    *(this + 364) += v6;
+  if ( result & 0b00000001 )
+      *(this + 368) += v6;
+  if ( result & 0b00000100 )
+      *(this + 372) += v6;
+  if ( result & 0b00000100 )
+    *(this + 372) += v6;
+  if ( result & 0b00100000 )
+    *(this + 388) += v6;
+  if ( result & 0b00000010 )
+    *(this + 392) += v6;
+  if ( result & 0b00001000 )
+    *(this + 396) += v6;
   return result;
 }
 
@@ -1312,9 +1311,9 @@ int __cdecl LGJCbord::set_hard_report_sw(LGJCbord *this)
   int result; // eax@11
 
   if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(1, 0x2000000) )
-    ++*((_DWORD *)this + 88);
+    ++*(this + 352);
   if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(2, 0x2000000) )
-    ++*((_DWORD *)this + 94);
+    ++*(this + 376);
   if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(1, 0x800000) )
     ++*((_DWORD *)this + 89);
   if ( (unsigned __int8)_sInterfaceJvs::checkTrgOn(2, 0x800000) )
@@ -1333,16 +1332,16 @@ char __cdecl LGJCbord::setGameStatusADV(LGJCbord *this)
   char result; // al@3
   acpSystem *v3; // [esp+0h] [ebp-8h]@0
 
-  v1 = *((_BYTE *)this + 209);
+  v1 = classCommand;
   if ( v1 == 23 || v1 == 17 || v1 == 18 )
   {
     result = 25 - ((unsigned __int8)acpSystem::isFreePlay(v3) < 1u);
-    *((_BYTE *)this + 209) = result;
+    classCommand = result;
   }
   else
   {
     result = 6 - ((unsigned __int8)acpSystem::isFreePlay(v3) < 1u);
-    *((_BYTE *)this + 209) = result;
+    classCommand = result;
   }
   return result;
 }
