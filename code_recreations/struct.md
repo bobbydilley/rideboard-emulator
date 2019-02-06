@@ -1,3 +1,4 @@
+```
 The LGJCbord struct memory layout:
       000: Status of thing. 0 means none, 1 means its there, 2 means something about updating
       005: serial port object
@@ -105,7 +106,7 @@ RECEIVE:
 
   46 - 0xC0
   47 - UNKNOWN
-  48 - POSSIBLE NUMBER (16) - THIS NEEDS TO EQUAL 1 INITIALLY I THINK! CAN EQUAL 3
+  48 - COMMAND - THIS NEEDS TO EQUAL 1 INITIALLY I THINK! CAN EQUAL 3 or 0x15
   49 - UNKNOWN
   50 - BUTTONS
   51 - BUTTONS
@@ -166,3 +167,4 @@ if (*(int8_t *)(*g_pCbord + 0x140) != 0x0) {
           var_24 = 0x21;
   }
   LGJCbord::setSeatParam(*g_pCbord, var_24, 0x0);
+```
