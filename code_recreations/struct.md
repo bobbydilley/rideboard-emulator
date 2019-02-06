@@ -50,7 +50,8 @@ The LGJCbord struct memory layout:
       313: Something about teest mode populates 37.
       314: seems to be outputs?
       320: means seat it okay? Might be front or rear position selector?
-      324: Some counter
+      322: COUNTER RELATED TO 53
+      324: COUNTER RELATED TO 47
       328: Gets set to value in 47 if value in 47 is less than 4
 
       332: Gets incremeneted if 53 is less than 10
