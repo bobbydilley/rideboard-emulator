@@ -81,7 +81,7 @@ SEND:
 RECEIVE:
   46 - 0xC0
   47 - If less than 0x4 324 gets incremented by one, and 328 gets set to this
-  48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!) - should not equal -1? If it equals 26 the ride is stopped.
+  48 - This gets checked at the startup, and if its 16 or 26 something else happens (26 looks like it means it works!) - should not equal -1? If it equals 26 the ride is stopped. If this equals -1 and not 0 then it should go strait to failure.
   49 - Must be less than or equal to 0xC and 49 & 0xf != 0x0 can be (1,3,5,11)
   50 - DWORD - LOW BYTE      |   -- SEEMS TO GET SET TO RETURN STATUS? I think these are the switches &0x10 is initialise
   51 - HIGH BYTE     |       (THIS REQUIRES TO BE && with 0x10 and 0x20 to make some other things 0 - so probably a good start)
