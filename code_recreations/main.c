@@ -1,3 +1,4 @@
+int mode; //0
 int processMode; // 4
 int baudRate; // 8
 _lgjSCI globalSerialPointer; // 20
@@ -1226,38 +1227,43 @@ LABEL_7:
 
 int __cdecl LGJCbord::set_recv_data(LGJCbord *this)
 {
-  int v1; // edx@1
+  int buttons; // edx@1
   unsigned __int8 v2; // al@1
   char v3; // dl@8
   int v4; // edx@10
   int result; // eax@10
 
-  v1 = (*((unsigned __int8 *)this + 52) << 16) | (*((unsigned __int8 *)this + 51) << 8) | *((unsigned __int8 *)this + 50);
-  v2 = *((_BYTE *)this + 49);
-  *((_DWORD *)this + 53) = v1;
-  if ( v2 & 0xF && v2 <= 0xCu )
-    *((_BYTE *)this + 240) = v2;
-  if ( BYTE1(v1) & 0x10 )
+  buttons = (*(this + 52) << 16) | (*(this + 51) << 8) | *(this + 50);
+  v2 = *(this + 49);
+  *(this + 212) = buttons;
+
+  if ( v2 & 0xF && v2 <= 12 ) // If bits 1 or 2 are up on V2
+    *(this + 240) = v2;
+
+  if ( BYTE1(buttons) & 0x10 )
     *(this + 216) = 0;
-  if ( BYTE1(v1) & 0x20 )
+
+  if ( BYTE1(buttons) & 0x20 )
     *(this + 217) = 0;
-  v3 = *((_BYTE *)this + 47);
-  if ( (unsigned __int8)(v3 - 2) <= 2u )
+
+  v3 = *(this + 47);
+  if ( v3 <= 4 )
   {
-    ++*((_DWORD *)this + 81);
+    ++*(this + 324);
     *((_BYTE *)this + 328) = v3;
   }
-  v4 = *((unsigned __int8 *)this + 53);
+
+  v4 = *(this + 53);
   result = v4 - 1;
-  if ( (unsigned __int8)(v4 - 1) <= 9u )
+  if ( v4  <= 10 )
   {
-    result = *((_DWORD *)this + 85);
-    ++*((_DWORD *)this + 83);
-    *((_BYTE *)this + 336) = v4;
+    result = *(this + 340);
+    ++*(this + 332);
+    *(this + 336) = v4;
     if ( !result )
     {
-      result = (unsigned __int8)v4 + 200;
-      *((_DWORD *)this + 85) = result;
+      result = v4 + 200;
+      *(this + 340) = result;
     }
   }
   return result;

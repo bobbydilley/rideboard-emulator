@@ -10,7 +10,7 @@ The LGJCbord struct memory layout:
       018: Open Fail is 0x00 Success is 0x01
       020: The serial port object probably
       024: CBord enable
-      025: Check of CLASS RECEIVE BUFFER OKAY? set to 0 on init
+      025: Check of CLASS RECEIVE BUFFER OKAY? set to 0 on init // Might mean seat ini file exists?!
       026: wont send if 1 (test mode no send?)
 
       031: Some variable that causes a branch
@@ -24,13 +24,14 @@ The LGJCbord struct memory layout:
 
       209: First byte of sent message can be (0x11, 0x17 = 0x19 response) (0x00, 0x12 = 0x6) THIS IS CONFIRMED - 3 seems to be faliure.
 
-      212: made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215 (50 0x10 is initialise button)
+      212: The Buttons. made up of a 24bit number from (50, 51, 52) This is a DWORD so probably up to 215 (50 0x10 is initialise button)
       213: Bit masks of limit sensors (This is correct, seat lock/unlock is 0x2)
       214: Bit masks of limit sensors
       215: Bit mask of sensors etc.
       216: Set to 0 if the bit 5 (from the right) of 52 doesn't equal 0 (could also be 50 I don't know what HYBYTE does) starts as 1
       217: Set to 0 if the bit 6 of 52 doesn't equal 0
       218: Sets what in 34 (Probably seat command?)
+      236: soem counter float thing?
       240: Some variable set to 0x0 on init (GETS THE NUMBER FROM 49 PUT IN THERE)
       241: possibly the last position
       256: Gets set to 0 when seat stop - possibly a position?
@@ -106,7 +107,7 @@ RECEIVE:
 
   46 - 0xC0
   47 - SOME COUNTER
-  48 - COMMAND - THIS NEEDS TO EQUAL 1 INITIALLY I THINK! CAN EQUAL 3 or 0x15
+  48 - COMMAND - THIS NEEDS TO EQUAL 1 INITIALLY TO GET FROM THE SERIAL CHECKING BITn then it needs to equal 2! CAN EQUAL 3 or 0x15 or 5 - 26 means ride stop!
   49 - UNKNOWN
   50 - BUTTONS
   51 - BUTTONS
@@ -124,8 +125,30 @@ RECEIVE:
   63 - CONTROL BOARD INFO
   64 - CONTROL BOARD INFO
   65 - CONTROL BOARD INFO
-  66 - BOOLEAN
+  66 - COUNTER
   67 - CHECKSUM
+
+
+  Interested in 47, 49, 53, 66
+
+  v14 = *((_BYTE *)g_pCbord + 320);
+        if ( !v14 )
+          goto LABEL_86;
+
+  if 49 is 3 or 9:
+
+  v13 = g_pCbord;
+LABEL_45:
+ if ( *( g_pCbord + 320) ) {
+   *( g_pCbord + 320) = 0;
+   v15 = 1065353216;
+ }
+ else {
+   v15 = 0;
+   *( g_pCbord + 320) = 1;
+ }
+ *((_DWORD *)g_pShader + 141) = v15;
+
 
   V1 = &61
   SELECT CASE V1:
@@ -168,3 +191,45 @@ if (*(int8_t *)(*g_pCbord + 0x140) != 0x0) {
   }
   LGJCbord::setSeatParam(*g_pCbord, var_24, 0x0);
 ```
+
+
+
+
+# How it works
+
+If there is no seat_init file it will turn the number 01 which mean initialise. This comes from position 209 -> 48.
+
+if(&66 != 0) {
+  &236 = &66 * 0.020807063;
+} else {
+
+  &236 = 1065749138;
+}
+
+
+if 48 == 0x10 then reply 16
+if 48 == 0x12 then reply 18
+
+Something to do with 0->10 and then 200->209 - some strange counter maybe?
+
+
+
+
+FOR TEST TO work
+340 must equal 0 for the tests to work! How do we get this to happen?
+25 must equal 1
+
+
+
+
+- It uses _sInterface::checkTrgOn(1, 0x4000); to initialise. We could change this code so it just equals 1.
+
+LOBYTE(v1) = _sInterface::checkTrgOn(1, 0x4000);
+      if ( (_BYTE)v1 )
+      {
+        v46 = g_pCbord;
+LABEL_74:
+        *((_BYTE *)v46 + 209) = 3;
+        *((_DWORD *)this + 20) = 4;
+        LOBYTE(v1) = gsysMessage::setMsg(g_pMessage, 1, 3, 0);
+      }
