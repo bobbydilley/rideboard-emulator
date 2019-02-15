@@ -56,7 +56,7 @@ When dummy serial is turned on, and its waiting for the INITIALIZE button:
 C0 02 00 00 01 00 03
 ```
 
-Maybe the buttons are connected to JVS as well?
+Buttons are not connected to JVS, but I think possibly they keyboard was used to simluate the button!?
 
 ## Emulator Information
 
