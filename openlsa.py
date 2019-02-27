@@ -1,5 +1,6 @@
 import time
 import serial
+import os
 
 def ssend_byte(send_byte):
     global checksum_send, ser
@@ -25,7 +26,7 @@ checksum_total = 0x00
 while 1:
     byte = ser.read(1)
     bytes.append(ord(byte))
-    print byte.encode('hex').upper()
+    print byte.encode('hex').upper(),
 
 
     if len(bytes) < 7:
@@ -37,40 +38,31 @@ while 1:
 
     if len(bytes) == 7:
         if checksum_total == bytes[6]:
-            print "[OK]",
+            print "[OK]"
 
-            print "C0",
-            ser.write(0xC0)
-            checksum_send = 0x00
+	print "COMMAND: ", str(bytes[1]).encode('hex').upper()
+	print "GUN REACTION P1: ", bytes[3] & 0x10 > 0
+	print "GUN REACTION P2: ", bytes[3] & 0x20 > 0
+	print "BLOW FRONT P1: ", bytes[3] & 0x01 > 0
+	print "BLOW FRONT P2: ", bytes[3] & 0x02 > 0
+	print "BLOW BACK P1: ", bytes[3] & 0x04 > 0
+	print "BLOW BACK P2: ", bytes[3] & 0x08 > 0
+	
+        print "GAME STOP LAMP: ", bytes[5] & 0x08 > 0
+	print "RESET LAMP: ", bytes[5] & 0x01 > 0
+	print "ERROR LAMP: ", bytes[5] & 0x02 > 0
+	print "SAFETY LAMP: ", bytes[5] & 0x04 > 0
+	print "FLOOR LAMP: ", bytes[5] & 0x10 > 0
+	print "SPOT LAMP: ", bytes[5] & 0x20 > 0
 
+	print "BILLBOARD: ",
+	if (bytes[4] & 0x07) == 0x07:
+		print "BLUE"
+	elif (bytes[4] & 0x07) == 0x06:
+		print "GREEN"
+	elif (bytes[4] & 0x07) == 0x05:
+		print "RED"
+	else:
+		print "False"
 
-            ssend_byte(0x01)
-            ssend_byte(0x01)
-            ssend_byte(0x01)
-
-            ssend_byte(0x00) # Buttons
-            ssend_byte(0x00) # Buttons
-            ssend_byte(0x00) # Buttons
-            ssend_byte(0x00) # Unknown
-
-            ssend_byte(0x03) # Program
-            ssend_byte(0x03) # USB Loader
-            ssend_byte(0x03) # Applications
-
-            ssend_byte(0x00) # Control Board Sum
-            ssend_byte(0x00) # Control Board Sum
-            ssend_byte(0x00) # Control Board Sum
-
-            ssend_byte(0x00) # Control Board Info
-            ssend_byte(0x00) # Control Board Info
-            ssend_byte(0x00) # Control Board Info
-            ssend_byte(0x00) # Control Board Info
-            ssend_byte(0x00) # Control Board Info
-            ssend_byte(0x00) # Control Board Info
-
-            ssend_byte(0xFF) # Unknown
-
-            print str(checksum_send),
-            ser.write(checksum_send)
-            ser.flush()
-            print "[SENT] "
+	print "TURN: ", bytes[2]
