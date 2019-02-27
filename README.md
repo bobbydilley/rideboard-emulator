@@ -56,7 +56,17 @@ When dummy serial is turned on, and its waiting for the INITIALIZE button:
 C0 02 00 00 01 00 03
 ```
 
-Buttons are not connected to JVS, but I think possibly they keyboard was used to simluate the button!?
+What I think the things are now
+
+C0 - SYNC BYTE
+02 - COMMAND
+00 - CHAIR POSITION
+00 - LIGHT/BLOWER
+01 - LIGHT/BLOWER?
+00 - LIGHT/BLOWER
+03 - CHECK SUM
+
+Buttons are not connected to JVS, but I think possibly they keyboard was used to simluate the button!? There is a link to /dev/input/js0.
 
 ## Emulator Information
 
