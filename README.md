@@ -1,6 +1,12 @@
 # OpenLSA
 Open Large Scale Attraction Emulator (OpenLSA) is an emulator for the ride boards in Let's Go Jungle Special, The House Of The Dead 4 Special, and possibly Jurassic Park Special. The project aims to document the protocol so that large attraction games using these boards, can be played at home.
 
+# Reverse Engineer
+
+All of the reverse engineering info is stored here:
+
+https://raw.githubusercontent.com/bobbydilley/OpenLSA/master/code_recreations/struct.md
+
 ## Game Information
 
 ### Let's Go Jungle Special
