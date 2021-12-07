@@ -5,7 +5,7 @@ This project is an emulator for the following large scale attraction arcade game
 - Let's Go Jungle Special
 - The House Of The Dead 4 Special
 
-> It's possible that this would also work for The Lost World Special, however I've never seen a real machine to test it with.
+It's possible that this would also work for The Lost World Special, however I've never seen a real machine to test it with.
 
 ## Building & Running
 
