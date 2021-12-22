@@ -25,6 +25,10 @@ You can pass the path of your serial device in when running using the following:
 sudo ./rideboard /dev/ttyUSB1
 ```
 
+## Running on Lindbergh
+
+The source and executable for a version of this software that runs on the Lindbergh has also been included.
+
 ## Protocol Information
 
 The board communicates with the Sega Lindbergh motherboard through one of the serial ports on the front of the device.
