@@ -422,6 +422,8 @@ int processEmulation(RideState *state)
 	case 0x19: // Work out what ADF means?
 		state->CommandReply = 0x06;
 	case 0x05: // Coin play, not coined up
+		state->CommandReply = 0x05;
+		break;
 	case 0x06: // Ticket play, waiting for init by attendant (Not sure if this is correct)
 		state->CommandReply = 0x08;
 		break;

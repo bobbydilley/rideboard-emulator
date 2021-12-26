@@ -36,7 +36,7 @@
 #define DEFAULT_SERIAL_INTERFACE_PATH "/dev/ttyS0"
 
 /* Enable Debug Mode */
-#define DEBUG_MODE 0
+#define DEBUG_MODE 1
 
 /* Variable to signify the state of the emulator */
 static volatile int running = 0;
@@ -105,21 +105,7 @@ typedef struct
  */
 int readPacket(int serialPort, char *packet)
 {
-	struct timeval tv;
-	fd_set fd_serial;
-
-	FD_ZERO(&fd_serial);
-	FD_SET(serialPort, &fd_serial);
-
-	tv.tv_sec = 0;
-	tv.tv_usec = READ_TIMEOUT * 1000;
-
-	if (select(serialPort + 1, &fd_serial, NULL, NULL, &tv) < 1)
-		return 0;
-
-	if (!FD_ISSET(serialPort, &fd_serial))
-		return 0;
-
+	usleep(500 * 1000);
 	return read(serialPort, packet, INPUT_PACKET_SIZE);
 }
 
@@ -153,7 +139,11 @@ int processInputPacket(char *packet, RideState *state)
 	char checksum = 0;
 	int i;
 	for (i = 1; i < INPUT_PACKET_SIZE - 1; i++)
+	{
+		printf("%d ", packet[i]);
 		checksum ^= packet[i];
+	}
+	printf("\n");
 
 	if (checksum != packet[INPUT_PACKET_SIZE - 1])
 	{
@@ -341,7 +331,7 @@ int processEmulation(RideState *state)
 	// Respond with the correct response command
 	switch (state->Command)
 	{
-	case 0x01: // Boot
+	case 0x01:						// Boot
 		state->CommandReply = 0x01; // 0xFF to show update screen
 		break;
 	case 0x02: // Init check
@@ -362,6 +352,8 @@ int processEmulation(RideState *state)
 	case 0x19: // Work out what ADF means?
 		state->CommandReply = 0x06;
 	case 0x05: // Coin play, not coined up
+		state->CommandReply = 0x05;
+		break;
 	case 0x06: // Ticket play, waiting for init by attendant (Not sure if this is correct)
 		state->CommandReply = 0x08;
 		break;
@@ -480,7 +472,8 @@ int main(int argc, char **argv)
 
 	printf("SEGA Lindbergh Rideboard Emulator\n");
 
-	if(mkfifo(serialInterfacePath, 0777) != 0) {
+	if (mkfifo(serialInterfacePath, 0777) != 0)
+	{
 		printf("Critical: Failed to make emulated fifo\n");
 		return EXIT_FAILURE;
 	}

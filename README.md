@@ -29,6 +29,12 @@ sudo ./rideboard /dev/ttyUSB1
 
 The source and executable for a version of this software that runs on the Lindbergh has also been included.
 
+You should run the software before starting the executable for the game, by adding this line before the game is called in the `game` file.
+
+```
+$(pwd)/rideboard-emulator &
+```
+
 ## Protocol Information
 
 The board communicates with the Sega Lindbergh motherboard through one of the serial ports on the front of the device.
