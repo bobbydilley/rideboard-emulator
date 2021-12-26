@@ -29,7 +29,7 @@ sudo ./rideboard /dev/ttyUSB1
 
 The source and executable for a version of this software that runs on the Lindbergh has also been included.
 
-You should run the software before starting the executable for the game, by adding this line before the game is called in the `game` file.
+You should run the software before starting the executable for the game, by adding this line before the game is called in the `disk0/hotd4-sp/elf/game` file.
 
 ```
 $(pwd)/rideboard-emulator &
