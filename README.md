@@ -1,4 +1,4 @@
-# Sega Rideboard Emulator
+# Sega Lindbergh Rideboard Emulator
 
 This project is an emulator for the following large scale attraction arcade games:
 
